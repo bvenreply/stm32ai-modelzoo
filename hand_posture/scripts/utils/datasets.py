@@ -200,8 +200,10 @@ def fetch_npz_data(dataset,path,
                    expected_nb_of_zones=64,
                    save_to_file=None):
 
+
     working_dir = os.getcwd()
     dataset_path = os.path.join(working_dir, path)
+    print("Using dataset path: ", dataset_path)
     List_of_gesture_dir = [os.path.join(dataset_path, posture) for posture in dataset.class_names if posture in os.listdir(dataset_path)]
     list_of_dirs = [os.path.join(gesture_folder_path, record, "npz") for gesture_folder_path in List_of_gesture_dir for
                     record in os.listdir(gesture_folder_path)]
