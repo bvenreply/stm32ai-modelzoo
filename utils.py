@@ -1,3 +1,4 @@
+from io import BytesIO
 from typing import Any, Tuple
 from functools import cache
 import config
@@ -11,6 +12,15 @@ def token() -> str:
         return file.read()
 
 headers = {"Authorization": f"Bearer {token()}"}
+
+class NamedBuffer(BytesIO):
+    name: str
+
+    def __init__(self, name: str, *args: Any, **kwargs: Any):
+        super().__init__(*args, **kwargs)
+
+        self.name = name
+
 
 class JobException(Exception):
     ...
@@ -38,10 +48,8 @@ def block_until_done(job_id: str) -> Mapping[str, Any]:
 def _artifacts(job: Mapping[str, Any]) -> Sequence[Tuple[str, str]]:
     artifacts = job["outputs"]["artifacts"]
 
-
-    print(artifacts)
     return tuple(
-        (item["name"], item["authorized_get_url"]) for item in artifacts
+        (item["name"], item["authorizedGetUrl"]) for item in artifacts
     )
 
 def download_artifacts(job: Mapping[str, Any]) -> Mapping[str, Any]:

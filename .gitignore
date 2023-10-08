@@ -4,3 +4,12 @@
 __pycache__
 
 token.txt
+prod_token.txt
+
+# Output files
+best_model
+best_augmented_model
+float_model_confusion_matrix
+training_curves
+output
+artifact
