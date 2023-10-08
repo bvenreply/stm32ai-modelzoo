@@ -13,3 +13,4 @@ float_model_confusion_matrix
 training_curves
 output
 artifact
+training_logs
