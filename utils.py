@@ -2,9 +2,9 @@ from io import BytesIO
 from typing import Any, Tuple
 from functools import cache
 import config
-import time
 from collections.abc import Sequence, Mapping
 import httpx
+import json
 
 @cache
 def token() -> str:
@@ -25,25 +25,28 @@ class NamedBuffer(BytesIO):
 class JobException(Exception):
     ...
     
-def block_until_done(job_id: str) -> Mapping[str, Any]:
-    with httpx.Client() as client:
-        while True:
-            res = client.get(
-                f"{config.JOBCONTROL_API_JOBS_ENDPOINT}/{job_id}",
-                headers=headers
-            )
-            job = res.json()
-            status = job["status"]
+async def block_until_done(job_id: str) -> Mapping[str, Any]:
+    async with httpx.AsyncClient() as client:
+        async with client.stream(
+            "GET",
+            f"{config.JOBCONTROL_API_JOBS_ENDPOINT}/{job_id}",
+            headers=headers,
+            params={
+                "watch": "true"
+            },
+            timeout=300
+        ) as res:
+            async for line in res.aiter_lines():
+                job = json.loads(line)
+                match job["status"]:
+                    case "Succeeded":
+                        return job
+                    case "Pending" | "Running":
+                        continue
+                    case _:
+                        raise JobException(f"Job has unexpected status: {job['status']}")
 
-            if status == "Succeeded":
-                return job
-            elif status == "Pending" or status == "Running":
-                time.sleep(config.JOB_POLLING_INTERVAL_SECS)
-                # Continue polling...
-            else:
-                raise JobException(
-                    f"job {job_id} has unexpected status: {status}"
-                )
+        raise JobException("Job watch terminated unexpectedly")
 
 def _artifacts(job: Mapping[str, Any]) -> Sequence[Tuple[str, str]]:
     artifacts = job["outputs"]["artifacts"]
