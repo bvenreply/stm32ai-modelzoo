@@ -217,7 +217,7 @@ Make Sure to add the path to the stm32ai executable under **path_to_stm32ai**, e
 ![plot](./doc/img/cubeai_config.JPG)
 
 where:
-- `version` - Specify the **STM32Cube.AI** version used to benchmark the model, e.g. **7.3.0**.
+- `version` - Specify the **STM32Cube.AI** version used to benchmark the model, e.g. **8.1.0**.
 - `optimization` - *String*, defines the optimization used to generate the C model, options: "*balanced*", "*time*", "*ram*".
 - `footprints_on_target` - Specifies a board name to evaluate the model inference time on real stm32 target using the **Developer Cloud Services**, e.g. **'STM32H747I-DISCO'** (see [more](./doc/boards.json)), else keep **False** (i.e. only local download on **STM32Cube.AI** will be used to evaluate footprints w/o inference time).
 - `path_to_stm32ai` - *Path* to stm32ai executable file to use local download, else **False**.

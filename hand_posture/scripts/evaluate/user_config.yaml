@@ -18,10 +18,10 @@ model:
   model_path: ../../models/CNN2D_ST_HandPosture/ST_pretrainedmodel_custom_dataset/ST_VL53L8CX_handposture_dataset/CNN2D_ST_HandPosture_8classes/CNN2D_ST_HandPosture_8classes.h5
 
 stm32ai:
-  version: 7.3.0
+  version: 8.1.0
   optimization: balanced
   footprints_on_target: STM32L4R9I-DISCO
-  path_to_stm32ai: C:/Work/AI/Cube.AI/7.3.0/windows/stm32ai.exe
+  path_to_stm32ai: C:/Work/AI/Cube.AI/8.1.0/windows/stm32ai.exe
 
 mlflow:
   uri: ./mlruns

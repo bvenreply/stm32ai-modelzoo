@@ -32,7 +32,7 @@ Only this hardware is supported for now
 
 ### __Tools installations__
 
-This getting started needs [STM32CubeIDE](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-ides/stm32cubeide.html) as well as [X-CUBE-AI](https://www.st.com/en/embedded-software/x-cube-ai.html) `v7.3.0`
+This getting started needs [STM32CubeIDE](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-ides/stm32cubeide.html) as well as [X-CUBE-AI](https://www.st.com/en/embedded-software/x-cube-ai.html) `v8.1.0`
 
 You can find the info to install the tools in the parents [README](../scripts/deployment/README.md) of the deployment part and the general [README](../../README.md) of the model zoo. 
 
@@ -122,7 +122,7 @@ The rest of the model details will be embedded in the `.c` and `.h` files genera
 
 ## __Limitations__
 
-- Supports only Cube-AI 7.3.0
+- Supports only Cube-AI 8.1.0
 - Supports only the NUCLEO-F401RE board with X-NUCLEO-53LxA1 TOF expansion board
 - Supports only neural network model whom size fits in SoC internal memory
 - Supports only non-quantized neural network models

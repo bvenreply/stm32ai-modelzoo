@@ -113,7 +113,7 @@ where:
 - `serie` - **STM32F4**, only supported option for *Getting Started*.
 - `IDE` -**GCC**, only supported option for *Getting Started*.
 - `verbosity` - *0* or *1*. Mode 0 is silent, and mode 1 displays messages when building and flashing C application on STM32 target.
-- `version` - Specify the **STM32Cube.AI** version used to benchmark the model, e.g. **7.3.0**.
+- `version` - Specify the **STM32Cube.AI** version used to benchmark the model, e.g. **8.1.0**.
 - `optimization` - *String*, define the optimization used to generate the C model, options: "*balanced*", "*time*", "*ram*".
 - `footprints_on_target` - (Not used for this example). **'STM32H747I-DISCO'** to use **Developer Cloud Services** to benchmark model and generate C code, else keep **False** (i.e. only local download of **STM32Cube.AI** will be used to get model footprints and C code w/o inference time).
 - `path_to_stm32ai` - *Path* to stm32ai executable file to use local download, else **False**.

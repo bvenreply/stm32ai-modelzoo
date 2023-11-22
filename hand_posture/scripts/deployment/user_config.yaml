@@ -22,10 +22,10 @@ stm32ai:
   serie: STM32F4
   IDE: GCC
   verbosity: 1
-  version: 7.3.0
+  version: 8.1.0
   optimization: balanced
   footprints_on_target: STM32L4R9I-DISCO
-  path_to_stm32ai: C:/Work/AI/Cube.AI/7.3.0/windows/stm32ai.exe
+  path_to_stm32ai: C:/Work/AI/Cube.AI/8.1.0/windows/stm32ai.exe
   path_to_cubeIDE: C:/ST/STM32CubeIDE_1.7.0/STM32CubeIDE/stm32cubeide.exe
 
 mlflow:
