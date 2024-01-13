@@ -1,0 +1,126 @@
+#!/bin/env python
+import yaml
+from os import path
+import logging
+import shutil
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format=""
+)
+
+log = logging.getLogger(__name__)
+
+# In place dict merge (a is the receiver)
+def merge(a: dict, b: dict, path=[]):
+    for key in b:
+        if key in a:
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge(a[key], b[key], path + [str(key)])
+            # elif a[key] != b[key]:
+            #     raise Exception('Conflict at ' + '.'.join(path + [str(key)]))
+            else:
+                a[key] = b[key]
+        else:
+            a[key] = b[key]  
+    return a
+
+
+
+# set -eu
+
+# if test -f /tmp/inputs/job.json ; then
+#     script_root="$(jq --raw-output '.root' </tmp/inputs/job.json)"
+# else
+#     echo 'Did not provide job configuration, this is an error' >&2
+#     exit 1
+# fi
+
+
+# script_root="$(python -c 'import json; print(json.)')"
+
+
+# if test -f /tmp/inputs/train.zip ; then
+#     unzip /tmp/inputs/train.zip -d /tmp/datasets/train
+# else
+#     echo 'Did not provide a training dataset, this is an error' >&2
+#     exit 1
+# fi
+
+# if test -f /tmp/inputs/valid.zip ; then
+#     unzip /tmp/inputs/valid.zip -d /tmp/datasets/valid
+# fi
+
+# if test -f /tmp/inputs/test.zip ; then
+#     unzip /tmp/inputs/test.zip -d /tmp/datasets/test
+# fi
+
+TRAINING_PATH = "/tmp/datasets/train"
+VALIDATION_PATH = "/tmp/datasets/valid"
+TEST_PATH = "/tmp/datasets/test"
+
+TRAIN_ZIP = "/tmp/inputs/train.zip"
+VALID_ZIP = "/tmp/inputs/valid.zip"
+TEST_ZIP = "/tmp/inputs/test.zip"
+
+def run():
+    log.info("Starting up training job...")
+
+    dataset_config = {
+        "training_path": TRAINING_PATH,
+        "validation_path": VALIDATION_PATH,
+        "test_path": TEST_PATH
+    }
+    config = { "dataset": dataset_config }
+
+    with open("/tmp/inputs/job.json", "rt") as file:
+        job_config = yaml.safe_load(file)
+
+        logging.debug("Job config: %r", job_config)
+
+        assert "root" in job_config
+
+        root = job_config["root"]
+
+        assert isinstance(root, str)
+        assert path.isdir(root), "Configured script root does not exist"
+
+    user_config_path = f"{root}/user_config.yaml"
+
+    with open(user_config_path, "rt") as file:
+        base_config = yaml.safe_load(file)
+    
+    _ = merge(config, base_config)
+
+    with open("/tmp/inputs/config.json", "rt") as file:
+        override_config = yaml.safe_load(file)
+    
+    _ = merge(config, override_config)
+
+
+    assert path.isfile(TRAIN_ZIP), "Training dataset was not provided"
+
+    shutil.unpack_archive(TRAIN_ZIP, TRAINING_PATH, "zip")
+
+
+    if path.isfile(VALID_ZIP):
+        shutil.unpack_archive(VALID_ZIP, VALIDATION_PATH, "zip")
+    else:
+        logging.info("Validation dataset was not provided")
+        del dataset_config["validation_path"]
+
+    if path.isfile(TEST_PATH):
+        shutil.unpack_archive(TEST_ZIP, TEST_PATH, "zip")
+    else:
+        logging.info("Test dataset was not provided")
+        del dataset_config["test_path"]
+
+    logging.debug("Final config: %r", config)
+
+    with open(user_config_path, "wt") as file:
+        yaml.safe_dump(config)
+
+
+if __name__ == "__main__":
+    run()
