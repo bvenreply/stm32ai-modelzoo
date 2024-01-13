@@ -97,7 +97,7 @@ def get_callbacks(cfg):
         tf.keras.callbacks.EarlyStopping(
             monitor="val_loss",
             mode="min",
-            patience=20,
+            patience=cfg.train_parameters.early_stopping.patience,
             restore_best_weights=True,
             verbose=2,
         )
@@ -114,7 +114,7 @@ def get_callbacks(cfg):
             save_weights_only=False,
             monitor="val_loss",
             mode="min",
-            save_best_only=True,
+            save_best_only=cfg.train_parameters.model_checkpoint.save_best_only,
         )
     )
 
