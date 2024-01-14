@@ -12,12 +12,12 @@ Content-Type: multipart/form-data; boundary=------------------------327ad9cec9ff
 Content-Disposition: form-data; name="uploadedFile"; filename="train_data"
 Content-Type: application/octet-stream
 
-< /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/inputs/train.zip
+< ./sample-inputs/object_detection/train.zip
 --------------------------327ad9cec9ffd168
 Content-Disposition: form-data; name="uploadedFile"; filename="valid_data"
 Content-Type: application/octet-stream
 
-< /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/inputs/valid.zip
+< ./sample-inputs/object_detection/valid.zip
 --------------------------327ad9cec9ffd168
 Content-Disposition: form-data; name="templateId"
 
