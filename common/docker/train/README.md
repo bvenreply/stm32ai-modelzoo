@@ -6,7 +6,7 @@
 
 The job expects the following files as input:
 
-- A json-formatted file at `/tmp/inputs/config.json` representing overrides for the options provided in `user_config.yaml`. The options in this file are merged together with the defaults in the training script folder.
+- A json-formatted file at `/tmp/inputs/config.json` representing overrides for the options provided in `user_config.yaml`. The options in this file are merged together with the defaults in the training script folder
 - A json-formatted file at `/tmp/inputs/job.json` containing job-specific input values. Most importantly, we expect a property under the key `root` whose value must be a string representing the path to the directory containing the target script. This is meant to be the mechanism enabling generality over all modelzoo examples. We'll henceforth refer to this path as `<script-root>`
 - The training dataset as a zip archive located at `/tmp/inputs/train.zip`
 - The (optional) validation dataset as a zip archive located at `/tmp/inputs/valid.zip`
@@ -16,7 +16,7 @@ The dataset archives must contain the dataset folder at the top level. These arc
 
 ### Output
 
-After the completion of the script 
+After completing the training, we expect the folder `outputs` to be created in `<script-root>`. This folder is archived at `/tmp/outputs/outputs.zip`. 
 
 ## Build
 

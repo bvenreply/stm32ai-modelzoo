@@ -1,0 +1,5 @@
+*?Dockerfile
+README.md
+.vscode
+.git
+venv.local

@@ -5,7 +5,7 @@ general:
 
 train_parameters:
   batch_size: 64
-  training_epochs: 50
+  training_epochs: 10
   optimizer: adam
   initial_learning: 0.001
   learning_rate_scheduler: reducelronplateau
@@ -41,7 +41,7 @@ dataset:
     - train 
     - tvmonitor
   training_path: /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/train-trimmed
-  validation_path: /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/valid-trimmed
+  validation_path: /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/valid-trimmed-quarter
   test_path: 
 
 pre_processing:

@@ -153,25 +153,25 @@ def train(cfg):
         )
         inference_model.save(model_path)
 
-    # Evaluate model footprints with STM32Cube.AI
-    if cfg.stm32ai.footprints_on_target:
-        print(
-            "[INFO] : Establishing a connection to STM32Cube.AI Developer Cloud to launch the model benchmark on STM32 target..."
-        )
-        try:
-            output_analyze = Cloud_analyze(cfg, model_path)
-            if output_analyze == 0:
-                raise Exception(
-                    "Connection failed, Offline benchmark will be launched."
-                )
-        except Exception as e:
-            output_analyze = 0
-            print("[FAIL] :", e)
-            print("[INFO] : Offline benchmark launched...")
-            benchmark_model(cfg, model_path)
+    # # Evaluate model footprints with STM32Cube.AI
+    # if cfg.stm32ai.footprints_on_target:
+    #     print(
+    #         "[INFO] : Establishing a connection to STM32Cube.AI Developer Cloud to launch the model benchmark on STM32 target..."
+    #     )
+    #     try:
+    #         output_analyze = Cloud_analyze(cfg, model_path)
+    #         if output_analyze == 0:
+    #             raise Exception(
+    #                 "Connection failed, Offline benchmark will be launched."
+    #             )
+    #     except Exception as e:
+    #         output_analyze = 0
+    #         print("[FAIL] :", e)
+    #         print("[INFO] : Offline benchmark launched...")
+    #         benchmark_model(cfg, model_path)
 
-    else:
-        benchmark_model(cfg, model_path)
+    # else:
+    #     benchmark_model(cfg, model_path)
 
     # train the model
 
@@ -313,27 +313,27 @@ def train(cfg):
                 "{}/{}".format(cfg.quantization.export_dir, "quantized_model.tflite"),
             )
 
-            # Generating C model
-            if cfg.stm32ai.footprints_on_target:
-                try:
-                    if output_analyze != 0:
-                        output_benchmark = Cloud_benchmark(
-                            cfg, quantized_model_path, output_analyze
-                        )
-                        if output_benchmark == 0:
-                            raise Exception(
-                                "Connection failed, generating C model using local STM32Cube.AI."
-                            )
-                    else:
-                        raise Exception(
-                            "Connection failed, generating C model using local STM32Cube.AI."
-                        )
-                except Exception as e:
-                    print("[FAIL] :", e)
-                    print("[INFO] : Offline C code generation launched...")
-                    benchmark_model(cfg, quantized_model_path)
-            else:
-                benchmark_model(cfg, quantized_model_path)
+            # # Generating C model
+            # if cfg.stm32ai.footprints_on_target:
+            #     try:
+            #         if output_analyze != 0:
+            #             output_benchmark = Cloud_benchmark(
+            #                 cfg, quantized_model_path, output_analyze
+            #             )
+            #             if output_benchmark == 0:
+            #                 raise Exception(
+            #                     "Connection failed, generating C model using local STM32Cube.AI."
+            #                 )
+            #         else:
+            #             raise Exception(
+            #                 "Connection failed, generating C model using local STM32Cube.AI."
+            #             )
+            #     except Exception as e:
+            #         print("[FAIL] :", e)
+            #         print("[INFO] : Offline C code generation launched...")
+            #         benchmark_model(cfg, quantized_model_path)
+            # else:
+            #     benchmark_model(cfg, quantized_model_path)
 
             # Evaluate the quantized model
             if cfg.quantization.evaluate:

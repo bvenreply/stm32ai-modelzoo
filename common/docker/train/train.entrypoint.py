@@ -1,14 +1,12 @@
 #!/bin/env python
 import yaml
+import sys
 from os import path
 import logging
 import shutil
+import subprocess as sp
 
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format=""
-)
+logging.basicConfig(level=logging.DEBUG)
 
 log = logging.getLogger(__name__)
 
@@ -27,35 +25,6 @@ def merge(a: dict, b: dict, path=[]):
     return a
 
 
-
-# set -eu
-
-# if test -f /tmp/inputs/job.json ; then
-#     script_root="$(jq --raw-output '.root' </tmp/inputs/job.json)"
-# else
-#     echo 'Did not provide job configuration, this is an error' >&2
-#     exit 1
-# fi
-
-
-# script_root="$(python -c 'import json; print(json.)')"
-
-
-# if test -f /tmp/inputs/train.zip ; then
-#     unzip /tmp/inputs/train.zip -d /tmp/datasets/train
-# else
-#     echo 'Did not provide a training dataset, this is an error' >&2
-#     exit 1
-# fi
-
-# if test -f /tmp/inputs/valid.zip ; then
-#     unzip /tmp/inputs/valid.zip -d /tmp/datasets/valid
-# fi
-
-# if test -f /tmp/inputs/test.zip ; then
-#     unzip /tmp/inputs/test.zip -d /tmp/datasets/test
-# fi
-
 TRAINING_PATH = "/tmp/datasets/train"
 VALIDATION_PATH = "/tmp/datasets/valid"
 TEST_PATH = "/tmp/datasets/test"
@@ -72,7 +41,7 @@ def run():
         "validation_path": VALIDATION_PATH,
         "test_path": TEST_PATH
     }
-    config = { "dataset": dataset_config }
+    config = {}
 
     with open("/tmp/inputs/job.json", "rt") as file:
         job_config = yaml.safe_load(file)
@@ -84,9 +53,12 @@ def run():
         root = job_config["root"]
 
         assert isinstance(root, str)
+
+        root = path.abspath(root)
+
         assert path.isdir(root), "Configured script root does not exist"
 
-    user_config_path = f"{root}/user_config.yaml"
+    user_config_path = path.join(root, "user_config.yaml")
 
     with open(user_config_path, "rt") as file:
         base_config = yaml.safe_load(file)
@@ -103,7 +75,6 @@ def run():
 
     shutil.unpack_archive(TRAIN_ZIP, TRAINING_PATH, "zip")
 
-
     if path.isfile(VALID_ZIP):
         shutil.unpack_archive(VALID_ZIP, VALIDATION_PATH, "zip")
     else:
@@ -118,9 +89,25 @@ def run():
 
     logging.debug("Final config: %r", config)
 
-    with open(user_config_path, "wt") as file:
-        yaml.safe_dump(config)
+    _ = merge(config, { "dataset": dataset_config })
 
+    with open(user_config_path, "wt") as file:
+        yaml.safe_dump(config, file)
+
+    _spawned = sp.run(
+        "python ./train.py",
+        stdout=sys.stdout,
+        stderr=sys.stderr,
+        shell=True,
+        cwd=root,
+        check=True
+    )
+
+    outputs_path = path.join(root, "outputs")
+
+    assert path.isdir(outputs_path), "Missing outputs folder"
+
+    shutil.make_archive("/tmp/outputs/outputs", "zip", root_dir=outputs_path)
 
 if __name__ == "__main__":
     run()

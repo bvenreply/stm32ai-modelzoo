@@ -1,2 +1,5 @@
 # CPython cache directory
 __pycache__
+
+# Development virtual environment
+venv.local
