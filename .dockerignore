@@ -3,3 +3,6 @@ README.md
 .vscode
 .git
 venv.local
+tutorials
+__pycache__
+/common/docker/*/sample-inputs
