@@ -143,22 +143,22 @@ def train(cfg):
                               "{}/{}".format(cfg.general.saved_models_dir, "best_model.h5"))
     model.save(model_path)
 
-    # Evaluate model footprints with cubeai
-    if cfg.stm32ai.footprints_on_target:
-        print("[INFO] : Establishing a connection to the Developer Cloud to launch the model benchmark on STM32 target...")
-        try:
-            output_analyze = Cloud_analyze(cfg, model_path)
-            if output_analyze == 0:
-                raise Exception(
-                    "Connection failed, using local cubeai. Link to download https://www.st.com/en/embedded-software/x-cube-ai.html")
-        except Exception as e:
-            output_analyze = 0
-            print("[FAIL] :", e)
-            print("[INFO] : Offline benchmark launched...")
-            benchmark_model(cfg, model_path)
+    # # Evaluate model footprints with cubeai
+    # if cfg.stm32ai.footprints_on_target:
+    #     print("[INFO] : Establishing a connection to the Developer Cloud to launch the model benchmark on STM32 target...")
+    #     try:
+    #         output_analyze = Cloud_analyze(cfg, model_path)
+    #         if output_analyze == 0:
+    #             raise Exception(
+    #                 "Connection failed, using local cubeai. Link to download https://www.st.com/en/embedded-software/x-cube-ai.html")
+    #     except Exception as e:
+    #         output_analyze = 0
+    #         print("[FAIL] :", e)
+    #         print("[INFO] : Offline benchmark launched...")
+    #         benchmark_model(cfg, model_path)
 
-    else:
-        benchmark_model(cfg, model_path)
+    # else:
+    #     benchmark_model(cfg, model_path)
 
     # Train the model
 
@@ -193,23 +193,23 @@ def train(cfg):
     training_confusion_matrix(test_ds, best_model, cfg.dataset.class_names)
 
 
-    # Generating C model
-    if cfg.stm32ai.footprints_on_target:
-        try:
-            if output_analyze != 0:
-                output_benchmark = Cloud_benchmark(cfg, model_path, output_analyze)
-                if output_benchmark == 0:
-                    raise Exception(
-                        "Connection failed, using local cubeai. Link to download https://www.st.com/en/embedded-software/x-cube-ai.html")
-            else:
-                raise Exception(
-                    "Connection failed, using local cubeai. Link to download https://www.st.com/en/embedded-software/x-cube-ai.html")
-        except Exception as e:
-            print("[FAIL] :", e)
-            print("[INFO] : Offline benchmark launched...")
-            benchmark_model(cfg, model_path)
-    else:
-        benchmark_model(cfg, model_path)
+    # # Generating C model
+    # if cfg.stm32ai.footprints_on_target:
+    #     try:
+    #         if output_analyze != 0:
+    #             output_benchmark = Cloud_benchmark(cfg, model_path, output_analyze)
+    #             if output_benchmark == 0:
+    #                 raise Exception(
+    #                     "Connection failed, using local cubeai. Link to download https://www.st.com/en/embedded-software/x-cube-ai.html")
+    #         else:
+    #             raise Exception(
+    #                 "Connection failed, using local cubeai. Link to download https://www.st.com/en/embedded-software/x-cube-ai.html")
+    #     except Exception as e:
+    #         print("[FAIL] :", e)
+    #         print("[INFO] : Offline benchmark launched...")
+    #         benchmark_model(cfg, model_path)
+    # else:
+    #     benchmark_model(cfg, model_path)
 
 
 
