@@ -43,8 +43,9 @@ def main(cfg: DictConfig) -> None:
     # Set all seeds
     setup_seed(42)
 
-    # Evaluate model performance / footprints and get c code / Lib
-    evaluate_model(cfg, c_header=True, c_code=True)
+    if cfg.model.evaluate:
+        # Evaluate model performance / footprints and get c code / Lib
+        evaluate_model(cfg, c_header=True, c_code=True)
 
     # Build and Flash Getting Started
     if cfg.stm32ai.serie.upper() == "STM32F4" and cfg.stm32ai.IDE.lower() == "gcc":
