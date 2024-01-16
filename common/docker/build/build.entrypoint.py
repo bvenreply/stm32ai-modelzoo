@@ -24,23 +24,11 @@ def merge(a: dict, b: dict, path=[]):
             a[key] = b[key]  
     return a
 
-
-TRAINING_PATH = "/tmp/datasets/train"
-VALIDATION_PATH = "/tmp/datasets/valid"
-TEST_PATH = "/tmp/datasets/test"
-
-TRAIN_ZIP = "/tmp/inputs/train.zip"
-VALID_ZIP = "/tmp/inputs/valid.zip"
-TEST_ZIP = "/tmp/inputs/test.zip"
+CUBEAI_CODEGEN_ZIP_PATH = "/tmp/inputs/cubeai-output.zip"
 
 def run():
-    log.info("Starting up training job...")
+    log.info("Starting up build job...")
 
-    dataset_config = {
-        "training_path": TRAINING_PATH,
-        "validation_path": VALIDATION_PATH,
-        "test_path": TEST_PATH
-    }
     config = {}
 
     with open("/tmp/inputs/job.json", "rt") as file:
@@ -70,26 +58,6 @@ def run():
     
     _ = merge(config, override_config)
 
-
-    assert path.isfile(TRAIN_ZIP), "Training dataset was not provided"
-
-    shutil.unpack_archive(TRAIN_ZIP, TRAINING_PATH, "zip")
-
-    if path.isfile(VALID_ZIP):
-        shutil.unpack_archive(VALID_ZIP, VALIDATION_PATH, "zip")
-    else:
-        logging.info("Validation dataset was not provided")
-        del dataset_config["validation_path"]
-
-    if path.isfile(TEST_PATH):
-        shutil.unpack_archive(TEST_ZIP, TEST_PATH, "zip")
-    else:
-        logging.info("Test dataset was not provided")
-        del dataset_config["test_path"]
-
-
-    _ = merge(config, { "dataset": dataset_config })
-
     config["hydra"] = { "run": { "dir": "outputs" } }
 
     logging.debug("Final config: %r", config)
@@ -98,7 +66,7 @@ def run():
         yaml.safe_dump(config, file)
 
     _spawned = sp.run(
-        "python ./train.py",
+        "python ./deploy.py",
         stdout=sys.stdout,
         stderr=sys.stderr,
         shell=True,

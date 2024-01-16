@@ -45,7 +45,10 @@ stm32ai:
   optimization: balanced
   footprints_on_target: STM32H747I-DISCO
   path_to_stm32ai: C:/ST/STM32CubeAI/en.x-cube-ai-windows_v7.3.0/windows/stm32ai.exe
-  path_to_cubeIDE: C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/stm32cubeide.exe
+  path_to_cubeIDE: /opt/st/stm32cubeide_1.14.0/stm32cubeide
+  
+  # Reply config extension
+  evaluate: False
 
 mlflow:
   uri: ./mlruns

@@ -22,7 +22,6 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 import tensorflow as tf
 
 logger = tf.get_logger()
-logger.setLevel(logging.ERROR)
 
 sys.path.append(os.path.abspath("../evaluate"))
 sys.path.append(os.path.abspath("../utils"))
@@ -43,8 +42,9 @@ def main(cfg: DictConfig) -> None:
     # Set all seeds
     setup_seed(42)
 
-    # Evaluate model performance / footprints and get c code / Lib
-    evaluate_model(cfg, c_header=True, c_code=True)
+    if cfg.stm32ai.evaluate:
+        # Evaluate model performance / footprints and get c code / Lib
+        evaluate_model(cfg, c_header=True, c_code=True)
 
     # if cfg.post_processing.type == "SSD" and cfg.model.input_shape == [192, 192, 3]:
     #     print("Modify .ld file")

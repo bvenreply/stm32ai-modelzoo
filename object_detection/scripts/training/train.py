@@ -16,7 +16,7 @@ from omegaconf import DictConfig
 import tensorflow as tf
 
 logger = tf.get_logger()
-logger.setLevel(logging.ERROR)
+
 
 warnings.filterwarnings("ignore")
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"

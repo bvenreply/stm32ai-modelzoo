@@ -46,7 +46,7 @@ from quantization import *
 from utils import get_config, mlflow_ini, setup_seed
 
 logger = tf.get_logger()
-logger.setLevel(logging.ERROR)
+
 
 warnings.filterwarnings("ignore")
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
