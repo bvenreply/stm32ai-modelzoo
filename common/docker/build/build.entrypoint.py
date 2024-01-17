@@ -1,10 +1,11 @@
-#!/bin/env python
+#!/usr/bin/env python
 import yaml
 import sys
-from os import path
+from os import path, makedirs
 import logging
 import shutil
 import subprocess as sp
+import zipfile as zf
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -34,17 +35,24 @@ def run():
     with open("/tmp/inputs/job.json", "rt") as file:
         job_config = yaml.safe_load(file)
 
-        logging.debug("Job config: %r", job_config)
+    logging.debug("Job config: %r", job_config)
 
-        assert "root" in job_config
+    assert "root" in job_config
+    root = job_config["root"]
+    assert isinstance(root, str)
 
-        root = job_config["root"]
+    root = path.abspath(root)
+    assert path.isdir(root), "Configured script root does not exist"
 
-        assert isinstance(root, str)
+    assert path.isfile(CUBEAI_CODEGEN_ZIP_PATH), "Missing CubeAI codegen archive"
 
-        root = path.abspath(root)
+    outputs_path = path.join(root, "outputs")
+    stm32ai_files_path = path.join(outputs_path, "stm32ai_files")
+    
+    makedirs(stm32ai_files_path, exist_ok=True)
 
-        assert path.isdir(root), "Configured script root does not exist"
+    with zf.ZipFile(CUBEAI_CODEGEN_ZIP_PATH, "r") as archive:
+        archive.extractall(stm32ai_files_path)
 
     user_config_path = path.join(root, "user_config.yaml")
 
@@ -59,6 +67,7 @@ def run():
     _ = merge(config, override_config)
 
     config["hydra"] = { "run": { "dir": "outputs" } }
+    config["model"]["model_path"] = "/tmp/inputs/model.tflite"
 
     logging.debug("Final config: %r", config)
 
@@ -74,11 +83,10 @@ def run():
         check=True
     )
 
-    outputs_path = path.join(root, "outputs")
+    project_folder = path.join(path.dirname(path.dirname(root)), "getting_started")
+    assert path.isdir(project_folder), "Missing project folder"
 
-    assert path.isdir(outputs_path), "Missing outputs folder"
-
-    shutil.make_archive("/tmp/outputs/outputs", "zip", root_dir=outputs_path)
+    shutil.make_archive("/tmp/outputs/getting_started", "zip", root_dir=project_folder)
 
 if __name__ == "__main__":
     run()
