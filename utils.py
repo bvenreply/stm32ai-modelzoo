@@ -1,6 +1,5 @@
 from io import BytesIO
 from typing import Any, Tuple
-from functools import cache
 import config
 import time
 from collections.abc import Sequence, Mapping
