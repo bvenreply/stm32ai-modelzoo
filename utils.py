@@ -6,12 +6,12 @@ import time
 from collections.abc import Sequence, Mapping
 import httpx
 
-@cache
 def token() -> str:
     with open("token.txt", "rt") as file:
         return file.read()
 
-headers = {"Authorization": f"Bearer {token()}"}
+def headers() -> Mapping[str, str]:
+    return {"Authorization": f"Bearer {token()}"}
 
 class NamedBuffer(BytesIO):
     name: str
@@ -30,7 +30,7 @@ async def block_until_done(job_id: str) -> Mapping[str, Any]:
         while True:
             res = client.get(
                 f"{config.JOBCONTROL_API_JOBS_ENDPOINT}/{job_id}",
-                headers=headers
+                headers=headers()
             )
             job = res.json()
             status = job["status"]
