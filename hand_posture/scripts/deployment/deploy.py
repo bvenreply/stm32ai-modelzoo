@@ -32,7 +32,7 @@ sys.path.append(os.path.abspath('../../../common'))
 from common_deploy import stm32ai_deploy
 from evaluate import evaluate_model
 from utils import get_config, mlflow_ini, setup_seed
-
+from header_file_generator import gen_h_user_file
 
 @hydra.main(version_base=None, config_path="", config_name="user_config")
 def main(cfg: DictConfig) -> None:
@@ -49,6 +49,7 @@ def main(cfg: DictConfig) -> None:
 
     # Build and Flash Getting Started
     if cfg.stm32ai.serie.upper() == "STM32F4" and cfg.stm32ai.IDE.lower() == "gcc":
+        gen_h_user_file(cfg, cfg.model.model_path)
         stm32ai_deploy(cfg, debug=False)
     else:
         raise TypeError("Options for cfg.stm32ai.serie and cfg.stm32ai.IDE not supported yet!")
