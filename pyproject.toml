@@ -1,19 +1,18 @@
 [tool.poetry]
-name = "vespucci-tof-demo"
+name = "modelzoo-train-generate-build"
 version = "0.1.0"
-description = "ToF backend demo"
+description = "Modelzoo train/generate/build demonstration notebook"
 authors = ["b.ventura <b.ventura@reply.it>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
-httpx = "^0.25.0"
-
+python = "^3.8"
+httpx = "*"
+ipykernel = "*"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.5.1"
 ruff = "^0.0.292"
-ipykernel = "^6.25.2"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,4 +1,10 @@
-VESPUCCI_BASE_URL = "https://dev.stm-vespucci.com"
+import os
+
+VESPUCCI_BASE_URL = (
+    "http://jobcontrol-api:5002"
+    if os.getlogin() == "vespucciuser"
+    else "https://dev.stm-vespucci.com"
+)
 JOBCONTROL_API_BASE_URL = f"{VESPUCCI_BASE_URL}/svc/jobcontrol/v1alpha1"
 JOBCONTROL_API_JOBS_ENDPOINT = f"{JOBCONTROL_API_BASE_URL}/jobs"
 TRAINING_JOB_TEMPLATE_ID = "01HM2EE60T3HJ4G5MPYK3GVT5D"
