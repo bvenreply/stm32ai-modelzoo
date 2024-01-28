@@ -1,7 +1,7 @@
 from io import BytesIO
 from typing import Any
 import config
-import time
+import asyncio
 import httpx
 
 
@@ -39,7 +39,7 @@ async def block_until_done(job_id: str):
             if status == "Succeeded":
                 return job
             elif status == "Pending" or status == "Running":
-                time.sleep(config.JOB_POLLING_INTERVAL_SECS)
+                await asyncio.sleep(config.JOB_POLLING_INTERVAL_SECS)
                 # Continue polling...
             else:
                 raise JobException(f"job {job_id} has unexpected status: {status}")
