@@ -14,7 +14,7 @@ Content-Type: application/octet-stream
 
 < ./sample-inputs/object_detection/train.zip
 --------------------------327ad9cec9ffd168
-Content-Disposition: form-data; name="uploadedFile"; filename="valid_data"
+Content-Disposition: form-data; name="uploadedFile2"; filename="valid_data"
 Content-Type: application/octet-stream
 
 < ./sample-inputs/object_detection/valid.zip

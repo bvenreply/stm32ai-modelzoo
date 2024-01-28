@@ -40,8 +40,8 @@ dataset:
     - sofa 
     - train 
     - tvmonitor
-  training_path: /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/train-trimmed
-  validation_path: /hd0/lavoro/st-vespucci/datasets/pascal-voc-2012/valid-trimmed-quarter
+  training_path:
+  validation_path:
   test_path: 
 
 pre_processing:
@@ -69,6 +69,7 @@ model:
   model_type: {name : mobilenet, version : v1, alpha : 0.25} 
   input_shape: [192,192, 3]
   transfer_learning : True
+  evaluate: False
 
 quantization:
   quantize: True

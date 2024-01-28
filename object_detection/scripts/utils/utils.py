@@ -294,10 +294,11 @@ def train(cfg):
         )
     )
 
-    # generate Ap curves of the float model
-    tf.print("[INFO] Evaluating the float model ...")
-    mAP = calculate_float_map(cfg, inference_model)
-    mlflow.log_metric("float_model_mAP", mAP)
+    if cfg.model.evaluate:
+        # generate Ap curves of the float model
+        tf.print("[INFO] Evaluating the float model ...")
+        mAP = calculate_float_map(cfg, inference_model)
+        mlflow.log_metric("float_model_mAP", mAP)
 
     # Quantize the model with training data
     if cfg.quantization.quantize:
