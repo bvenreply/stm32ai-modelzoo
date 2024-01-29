@@ -1,0 +1,69 @@
+@base_url = https://dev.stm-vespucci.com
+@jobcontrol_api_base_path = /svc/jobcontrol/v1alpha1
+@token = dummy
+###
+# @name create
+POST {{base_url}}{{jobcontrol_api_base_path}}/jobs
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: multipart/form-data; boundary=------------------------327ad9cec9ffd168
+
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="uploadedFile"; filename="train_data"
+Content-Type: application/octet-stream
+
+< ./sample-inputs/object_detection/train.zip
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="uploadedFile2"; filename="valid_data"
+Content-Type: application/octet-stream
+
+< ./sample-inputs/object_detection/valid.zip
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="templateId"
+
+01HM2EE60T3HJ4G5MPYK3GVT5D
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="runtimeInput"
+
+{
+    "job_config": {
+        "root": "object_detection/scripts/training"
+    },
+    "training_config": {}
+}
+
+--------------------------327ad9cec9ffd168--
+###
+# @name create
+POST {{base_url}}{{jobcontrol_api_base_path}}/jobs
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: multipart/form-data; boundary=------------------------327ad9cec9ffd168
+
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="uploadedFile"; filename="train_data"
+Content-Type: application/octet-stream
+
+< ./sample-inputs/hand_posture/train.zip
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="templateId"
+
+01HM2EE60T3HJ4G5MPYK3GVT5D
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="runtimeInput"
+
+{
+    "job_config": {
+        "root": "hand_posture/scripts/training"
+    },
+    "training_config": {}
+}
+
+--------------------------327ad9cec9ffd168--
+###
+GET {{base_url}}{{jobcontrol_api_base_path}}/jobs/{{create.response.body.$.id}}
+Authorization: Bearer {{token}}
+Accept: application/json
+###
+DELETE {{base_url}}{{jobcontrol_api_base_path}}/jobs/{{create.response.body.$.id}}
+Authorization: Bearer {{token}}

@@ -11,31 +11,58 @@ import tensorflow.keras.backend as K
 
 
 def get_sizes_ratios(cfg):
-
     if cfg.model.input_shape[0] == 192:
         sizes = [[0.26, 0.33], [0.42, 0.49], [0.58, 0.66], [0.74, 0.82], [0.9, 0.98]]
-        ratios = [[1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3],
-                  [1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3],
-                  [1.0, 2.0, 0.5, 1.0 / 3]]
+        ratios = [
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+        ]
     elif cfg.model.input_shape[0] == 224:
-        sizes = [[0.1, 0.16], [0.26, 0.33], [0.42, 0.49], [0.58, 0.66], [0.74, 0.82], [0.9, 0.98]]
-        ratios = [[1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3],
-                  [1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3],
-                  [1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3]]
+        sizes = [
+            [0.1, 0.16],
+            [0.26, 0.33],
+            [0.42, 0.49],
+            [0.58, 0.66],
+            [0.74, 0.82],
+            [0.9, 0.98],
+        ]
+        ratios = [
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+        ]
     else:
-        sizes = [[0.1, 0.16], [0.26, 0.33], [0.42, 0.49], [0.58, 0.66], [0.74, 0.82], [0.9, 0.98]]
-        ratios = [[1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3],
-                  [1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3],
-                  [1.0, 2.0, 0.5, 1.0 / 3], [1.0, 2.0, 0.5, 1.0 / 3]]
+        sizes = [
+            [0.1, 0.16],
+            [0.26, 0.33],
+            [0.42, 0.49],
+            [0.58, 0.66],
+            [0.74, 0.82],
+            [0.9, 0.98],
+        ]
+        ratios = [
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+            [1.0, 2.0, 0.5, 1.0 / 3],
+        ]
     return sizes, ratios
 
 
 def corners2centroids(bbox):
-    '''
+    """
     Convert bounding box coordinates from format
     (xmin, ymin, xmax, ymax)
     to format (xc, yc, width, height)
-    '''
+    """
     bbox_cen = []
     xc = bbox[0] + (bbox[2] - bbox[0]) / 2
     yc = bbox[1] + (bbox[3] - bbox[1]) / 2
@@ -51,9 +78,9 @@ def corners2centroids(bbox):
 
 
 def centroids2corners(bbox_cen):
-    '''
+    """
     Convert bounding box coordinates from format (xc, yc, width, height) to format (xmin, ymin, xmax, ymax)
-    '''
+    """
     bbox = []
 
     xmin = bbox_cen[0] - bbox_cen[2] / 2
@@ -70,9 +97,9 @@ def centroids2corners(bbox_cen):
 
 
 def centroids2topleft(bbox_cen):
-    '''
+    """
     Convert bounding box coordinates from format (xc, yc, width, height) to format (xmin, ymin, width, height)
-    '''
+    """
     bbox = []
 
     xmin = bbox_cen[0] - bbox_cen[2] / 2
@@ -87,9 +114,9 @@ def centroids2topleft(bbox_cen):
 
 
 def check_box(box, src_w, src_h):
-    '''
+    """
     Check box coordinates
-    '''
+    """
     valid = True
 
     xmin = box[0]
@@ -115,14 +142,14 @@ def check_box(box, src_w, src_h):
 
 
 def interval_overlap(interval_a, interval_b):
-    '''
+    """
     Find overlap between two intervals
     Arguments:
         interval_a: [x1, x2]
         interval_b: [x3, x4]
     Returns:
         overlapped distance
-    '''
+    """
     x1, x2 = interval_a
     x3, x4 = interval_b
     if x3 < x1:
@@ -138,14 +165,14 @@ def interval_overlap(interval_a, interval_b):
 
 
 def bbox_iou(box1, box2):
-    '''
+    """
     Find IoU between two boxes
     Arguments:
         box1 = [xmin, ymin, xmax, ymax]
         box2 = [xmin, ymin, xmax, ymax]
     Returns:
         iou similarity
-    '''
+    """
     intersect_w = interval_overlap([box1[0], box1[2]], [box2[0], box2[2]])
     intersect_h = interval_overlap([box1[1], box1[3]], [box2[1], box2[3]])
     intersect = intersect_w * intersect_h
@@ -156,14 +183,14 @@ def bbox_iou(box1, box2):
 
 
 def iou_matrix(boxes1, boxes2):
-    '''
+    """
     Compute IoU similarity matrix between set of m boxes1 and n boxes2
     Arguments:
         boxes1: [m, 4], 4 elements of  [xmin, ymin, xmax, ymax]
         boxes2: [n, 4], 4 elements of  [xmin, ymin, xmax, ymax]
     Returns:
         matrix of mxn iou metrics
-    '''
+    """
     m = len(boxes1)
     n = len(boxes2)
     iou_matrix = np.zeros((m, n), dtype=float)
@@ -174,9 +201,8 @@ def iou_matrix(boxes1, boxes2):
     return iou_matrix
 
 
-def gen_anchors(fmap, img_width, img_height, sizes,
-                ratios, clip=True, normalize=True):
-    '''
+def gen_anchors(fmap, img_width, img_height, sizes, ratios, clip=True, normalize=True):
+    """
     Generate anchor boxes for a feature map
     sizes = [s1, s2, ..., sm], ratios = [r1, r2, ..., rn], n_anchors = n + m - 1, only consider [s1, r1], [s1, r2], ..., [s1, rn], [s2, r1], ..., [sm, r1]
     Arguments:
@@ -189,7 +215,7 @@ def gen_anchors(fmap, img_width, img_height, sizes,
         normalize: normalize to image sizes
     Returns:
         list of anchor boxes
-    '''
+    """
     _, fmap_height, fmap_width, _ = fmap.shape
     fmap_height = int(fmap_height)
     fmap_width = int(fmap_width)
@@ -223,11 +249,13 @@ def gen_anchors(fmap, img_width, img_height, sizes,
     cy = np.linspace(
         offset_height * step_height,
         (offset_height + fmap_height - 1) * step_height,
-        fmap_height)
+        fmap_height,
+    )
     cx = np.linspace(
         offset_width * step_width,
         (offset_width + fmap_width - 1) * step_width,
-        fmap_width)
+        fmap_width,
+    )
     cx_grid, cy_grid = np.meshgrid(cx, cy)
     cx_grid = np.expand_dims(cx_grid, -1)
     cy_grid = np.expand_dims(cy_grid, -1)
@@ -243,14 +271,10 @@ def gen_anchors(fmap, img_width, img_height, sizes,
 
     # convert (cx, cy, w, h) to (xmin, ymin, xmax, ymax)
     anchors1 = np.copy(anchors).astype(np.float)
-    anchors1[:, :, :, 0] = anchors[:, :, :, 0] - \
-        anchors[:, :, :, 2] / 2.0  # set xmin
-    anchors1[:, :, :, 1] = anchors[:, :, :, 1] - \
-        anchors[:, :, :, 3] / 2.0  # set ymin
-    anchors1[:, :, :, 2] = anchors[:, :, :, 0] + \
-        anchors[:, :, :, 2] / 2.0  # set xmax
-    anchors1[:, :, :, 3] = anchors[:, :, :, 1] + \
-        anchors[:, :, :, 3] / 2.0  # set ymax
+    anchors1[:, :, :, 0] = anchors[:, :, :, 0] - anchors[:, :, :, 2] / 2.0  # set xmin
+    anchors1[:, :, :, 1] = anchors[:, :, :, 1] - anchors[:, :, :, 3] / 2.0  # set ymin
+    anchors1[:, :, :, 2] = anchors[:, :, :, 0] + anchors[:, :, :, 2] / 2.0  # set xmax
+    anchors1[:, :, :, 3] = anchors[:, :, :, 1] + anchors[:, :, :, 3] / 2.0  # set ymax
 
     # clip the coordinates to lie within the image boundaries
     if clip:
@@ -270,15 +294,17 @@ def gen_anchors(fmap, img_width, img_height, sizes,
 
     # expand for batch size dimension
     anchors1 = np.expand_dims(anchors1, axis=0)
-    anchors1 = K.tile(K.constant(anchors1, dtype='float32'),
-                      (K.shape(fmap)[0], 1, 1, 1, 1))
+    anchors1 = K.tile(
+        K.constant(anchors1, dtype="float32"), (K.shape(fmap)[0], 1, 1, 1, 1)
+    )
 
     return anchors1
 
 
-def gen_anchors_fmap(fmap_size, img_width, img_height,
-                     sizes, ratios, clip=True, normalize=True):
-    '''
+def gen_anchors_fmap(
+    fmap_size, img_width, img_height, sizes, ratios, clip=True, normalize=True
+):
+    """
     Generate anchor boxes for a given feature map size
     Arguments:
         fmap_size: feature map size
@@ -290,7 +316,7 @@ def gen_anchors_fmap(fmap_size, img_width, img_height,
         normalize: normalize to image sizes
     Returns:
         list of anchor boxes
-    '''
+    """
     fmap_height, fmap_width = fmap_size
     fmap_height = int(fmap_height)
     fmap_width = int(fmap_width)
@@ -324,11 +350,13 @@ def gen_anchors_fmap(fmap_size, img_width, img_height,
     cy = np.linspace(
         offset_height * step_height,
         (offset_height + fmap_height - 1) * step_height,
-        fmap_height)
+        fmap_height,
+    )
     cx = np.linspace(
         offset_width * step_width,
         (offset_width + fmap_width - 1) * step_width,
-        fmap_width)
+        fmap_width,
+    )
     cx_grid, cy_grid = np.meshgrid(cx, cy)
     cx_grid = np.expand_dims(cx_grid, -1)
     cy_grid = np.expand_dims(cy_grid, -1)
@@ -344,14 +372,10 @@ def gen_anchors_fmap(fmap_size, img_width, img_height,
 
     # convert (cx, cy, w, h) to (xmin, ymin, xmax, ymax)
     anchors1 = np.copy(anchors).astype(np.float)
-    anchors1[:, :, :, 0] = anchors[:, :, :, 0] - \
-        anchors[:, :, :, 2] / 2.0  # set xmin
-    anchors1[:, :, :, 1] = anchors[:, :, :, 1] - \
-        anchors[:, :, :, 3] / 2.0  # set ymin
-    anchors1[:, :, :, 2] = anchors[:, :, :, 0] + \
-        anchors[:, :, :, 2] / 2.0  # set xmax
-    anchors1[:, :, :, 3] = anchors[:, :, :, 1] + \
-        anchors[:, :, :, 3] / 2.0  # set ymax
+    anchors1[:, :, :, 0] = anchors[:, :, :, 0] - anchors[:, :, :, 2] / 2.0  # set xmin
+    anchors1[:, :, :, 1] = anchors[:, :, :, 1] - anchors[:, :, :, 3] / 2.0  # set ymin
+    anchors1[:, :, :, 2] = anchors[:, :, :, 0] + anchors[:, :, :, 2] / 2.0  # set xmax
+    anchors1[:, :, :, 3] = anchors[:, :, :, 1] + anchors[:, :, :, 3] / 2.0  # set ymax
 
     # clip the coordinates to lie within the image boundaries
     if clip:
@@ -373,13 +397,13 @@ def gen_anchors_fmap(fmap_size, img_width, img_height,
 
 
 def match_bipartite_greedy(weight_matrix):
-    '''
+    """
     Match bipartite greedy
     Arguments:
         weight_matrix: IoU matrix between anchor boxes and ground truth bounding boxes
     Returns:
         matches: matched index
-    '''
+    """
     weight_matrix = np.copy(weight_matrix)
     num_ground_truth_boxes = weight_matrix.shape[0]
     all_gt_indices = list(range(num_ground_truth_boxes))
@@ -400,14 +424,14 @@ def match_bipartite_greedy(weight_matrix):
 
 
 def match_multi(weight_matrix, threshold):
-    '''
+    """
     Match multi
     Arguments:
         weight_matrix: IoU matrix between anchor boxes and ground truth bounding boxes
         threshold: IoU threshold
     Returns:
         gt_indices_thresh_met, anchor_indices_thresh_met
-    '''
+    """
     num_anchor_boxes = weight_matrix.shape[1]
     all_anchor_indices = list(range(num_anchor_boxes))
 
@@ -421,13 +445,13 @@ def match_multi(weight_matrix, threshold):
 
 
 def intersection_area(boxes1, boxes2):
-    '''
+    """
     Get intersection areas between two sets of boxes
     Arguments:
         boxes1, boxes2: two sets of boxes in the format [xmin, ymin, xmax, ymax]
     Returns:
         matrix of intersection areas between two sets of boxes
-    '''
+    """
     m = boxes1.shape[0]  # The number of boxes in `boxes1`
     n = boxes2.shape[0]  # The number of boxes in `boxes2`
 
@@ -437,11 +461,15 @@ def intersection_area(boxes1, boxes2):
     xmax = 2
     ymax = 3
 
-    min_xy = np.maximum(np.tile(np.expand_dims(boxes1[:, [xmin, ymin]], axis=1), reps=(
-        1, n, 1)), np.tile(np.expand_dims(boxes2[:, [xmin, ymin]], axis=0), reps=(m, 1, 1)))
+    min_xy = np.maximum(
+        np.tile(np.expand_dims(boxes1[:, [xmin, ymin]], axis=1), reps=(1, n, 1)),
+        np.tile(np.expand_dims(boxes2[:, [xmin, ymin]], axis=0), reps=(m, 1, 1)),
+    )
 
-    max_xy = np.minimum(np.tile(np.expand_dims(boxes1[:, [xmax, ymax]], axis=1), reps=(
-        1, n, 1)), np.tile(np.expand_dims(boxes2[:, [xmax, ymax]], axis=0), reps=(m, 1, 1)))
+    max_xy = np.minimum(
+        np.tile(np.expand_dims(boxes1[:, [xmax, ymax]], axis=1), reps=(1, n, 1)),
+        np.tile(np.expand_dims(boxes2[:, [xmax, ymax]], axis=0), reps=(m, 1, 1)),
+    )
 
     side_lengths = np.maximum(0, max_xy - min_xy)
 
@@ -449,22 +477,22 @@ def intersection_area(boxes1, boxes2):
 
 
 def iou(boxes1, boxes2):
-    '''
+    """
     Computes the intersection-over-union similarity (also known as Jaccard similarity)
     of two sets of axis-aligned 2D rectangular boxes.
     Arguments:
         boxes1, boxes2: two sets of boxes in the format [xmin, ymin, xmax, ymax]
     Returns:
         IoU matrix
-    '''
+    """
     if boxes1.ndim > 2:
         raise ValueError(
-            "boxes1 must have rank either 1 or 2, but has rank {}.".format(
-                boxes1.ndim))
+            "boxes1 must have rank either 1 or 2, but has rank {}.".format(boxes1.ndim)
+        )
     if boxes2.ndim > 2:
         raise ValueError(
-            "boxes2 must have rank either 1 or 2, but has rank {}.".format(
-                boxes2.ndim))
+            "boxes2 must have rank either 1 or 2, but has rank {}.".format(boxes2.ndim)
+        )
 
     if boxes1.ndim == 1:
         boxes1 = np.expand_dims(boxes1, axis=0)
@@ -474,8 +502,9 @@ def iou(boxes1, boxes2):
     if not (boxes1.shape[1] == boxes2.shape[1] == 4):
         raise ValueError(
             "All boxes must consist of 4 coordinates, but the boxes in `boxes1` and `boxes2` have {} and {} coordinates, respectively.".format(
-                boxes1.shape[1],
-                boxes2.shape[1]))
+                boxes1.shape[1], boxes2.shape[1]
+            )
+        )
 
     intersection_areas = intersection_area(boxes1, boxes2)
 
@@ -487,19 +516,40 @@ def iou(boxes1, boxes2):
     xmax = 2
     ymax = 3
 
-    boxes1_areas = np.tile(np.expand_dims(
-        (boxes1[:, xmax] - boxes1[:, xmin]) * (boxes1[:, ymax] - boxes1[:, ymin]), axis=1), reps=(1, n))
-    boxes2_areas = np.tile(np.expand_dims(
-        (boxes2[:, xmax] - boxes2[:, xmin]) * (boxes2[:, ymax] - boxes2[:, ymin]), axis=0), reps=(m, 1))
+    boxes1_areas = np.tile(
+        np.expand_dims(
+            (boxes1[:, xmax] - boxes1[:, xmin]) * (boxes1[:, ymax] - boxes1[:, ymin]),
+            axis=1,
+        ),
+        reps=(1, n),
+    )
+    boxes2_areas = np.tile(
+        np.expand_dims(
+            (boxes2[:, xmax] - boxes2[:, xmin]) * (boxes2[:, ymax] - boxes2[:, ymin]),
+            axis=0,
+        ),
+        reps=(m, 1),
+    )
 
     union_areas = boxes1_areas + boxes2_areas - intersection_areas
 
     return intersection_areas / union_areas
 
 
-def match_gt_anchors(fmap_sizes, img_width, img_height, sizes, ratios, groundtruth_labels,
-                     n_classes, clip=True, normalize=True, pos_iou_threshold=0.5, neg_iou_limit=0.3):
-    '''
+def match_gt_anchors(
+    fmap_sizes,
+    img_width,
+    img_height,
+    sizes,
+    ratios,
+    groundtruth_labels,
+    n_classes,
+    clip=True,
+    normalize=True,
+    pos_iou_threshold=0.5,
+    neg_iou_limit=0.3,
+):
+    """
     Assign ground truth bouding boxes labels to anchor boxes for training
     Arguments:
         fmap_sizes (list): list of feature map size, i.e. [(32, 32), (16, 16), ...]
@@ -518,18 +568,13 @@ def match_gt_anchors(fmap_sizes, img_width, img_height, sizes, ratios, groundtru
         neg_iou_limit: IoU threshold to define as negative anchor boxes
     Returns:
         a tensor of shape [None, #boxes, n_classes + 1 + 4 + 4]
-    '''
+    """
     # list of anchors generated for each feature map
     bboxes_list = []
     for i in range(len(fmap_sizes)):
         bboxes_fmap = gen_anchors_fmap(
-            fmap_sizes[i],
-            img_width,
-            img_height,
-            sizes[i],
-            ratios[i],
-            clip,
-            normalize)
+            fmap_sizes[i], img_width, img_height, sizes[i], ratios[i], clip, normalize
+        )
         bboxes_list.append(bboxes_fmap)
 
     # indices in groundtruth_labels
@@ -574,12 +619,12 @@ def match_gt_anchors(fmap_sizes, img_width, img_height, sizes, ratios, groundtru
 
         classes_one_hot = class_vectors[labels[:, class_id].astype(np.int)]
         labels_one_hot = np.concatenate(
-            [classes_one_hot, labels[:, [xmin, ymin, xmax, ymax]]], axis=-1)
+            [classes_one_hot, labels[:, [xmin, ymin, xmax, ymax]]], axis=-1
+        )
 
         # calculate iou matrix between groundtruth boxes and anchor boxes
         # (#groundtruth_boxes, #anchor_boxes)
-        similarities = iou(
-            labels[:, [xmin, ymin, xmax, ymax]], truths[i, :, -8:-4])
+        similarities = iou(labels[:, [xmin, ymin, xmax, ymax]], truths[i, :, -8:-4])
 
         bipartite_matches = match_bipartite_greedy(weight_matrix=similarities)
 
@@ -588,9 +633,7 @@ def match_gt_anchors(fmap_sizes, img_width, img_height, sizes, ratios, groundtru
         similarities[:, bipartite_matches] = 0
 
         # Get all matches that satisfy the IoU threshold.
-        matches = match_multi(
-            weight_matrix=similarities,
-            threshold=pos_iou_threshold)
+        matches = match_multi(weight_matrix=similarities, threshold=pos_iou_threshold)
 
         # Write the ground truth data to the matched anchor boxes.
         truths[i, matches[1], :-4] = labels_one_hot[matches[0]]
@@ -600,17 +643,18 @@ def match_gt_anchors(fmap_sizes, img_width, img_height, sizes, ratios, groundtru
         similarities[:, matches[1]] = 0
 
         max_background_similarities = np.amax(similarities, axis=0)
-        neutral_boxes = np.nonzero(
-            max_background_similarities >= neg_iou_limit)[0]
+        neutral_boxes = np.nonzero(max_background_similarities >= neg_iou_limit)[0]
         truths[i, neutral_boxes, background_id] = 0
 
     # (gt - anchor) for all four coordinates
     truths[:, :, [-8, -7, -6, -5]] -= truths[:, :, [-4, -3, -2, -1]]
     # (xmin(gt) - xmin(anchor)) / w(anchor), (xmax(gt) - xmax(anchor)) / w(anchor)
-    truths[:, :, [-8, -6]
-           ] /= np.expand_dims(truths[:, :, -2] - truths[:, :, -4], axis=-1)
+    truths[:, :, [-8, -6]] /= np.expand_dims(
+        truths[:, :, -2] - truths[:, :, -4], axis=-1
+    )
     # (ymin(gt) - ymin(anchor)) / h(anchor), (ymax(gt) - ymax(anchor)) / h(anchor)
-    truths[:, :, [-7, -5]
-           ] /= np.expand_dims(truths[:, :, -1] - truths[:, :, -3], axis=-1)
+    truths[:, :, [-7, -5]] /= np.expand_dims(
+        truths[:, :, -1] - truths[:, :, -3], axis=-1
+    )
 
     return truths

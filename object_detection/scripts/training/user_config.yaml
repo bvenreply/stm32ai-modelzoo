@@ -5,16 +5,43 @@ general:
 
 train_parameters:
   batch_size: 64
-  training_epochs: 10000
+  training_epochs: 10
   optimizer: adam
   initial_learning: 0.001
   learning_rate_scheduler: reducelronplateau
 
+  ### Reply config extension
+  early_stopping:
+    patience: 2
+  model_checkpoint:
+    save_best_only: False
+
 dataset:
   name: Pascal_VOC_2012
-  class_names: [aeroplane,bicycle,bird,boat,bottle,bus,car,cat,chair,cow,diningtable,dog,horse,motorbike,person,pottedplant,sheep,sofa,train,tvmonitor]
-  training_path: C:/stmicroelectronics2022/DATASETS/voc_2012/train
-  validation_path: C:/stmicroelectronics2022/DATASETS/voc_2012/valid
+  # class_names: [person]
+  class_names:
+    - aeroplane 
+    - bicycle 
+    - bird 
+    - boat 
+    - bottle 
+    - bus 
+    - car 
+    - cat 
+    - chair 
+    - cow 
+    - diningtable 
+    - dog 
+    - horse 
+    - motorbike 
+    - person 
+    - pottedplant 
+    - sheep 
+    - sofa 
+    - train 
+    - tvmonitor
+  training_path:
+  validation_path:
   test_path: 
 
 pre_processing:
@@ -42,10 +69,11 @@ model:
   model_type: {name : mobilenet, version : v1, alpha : 0.25} 
   input_shape: [192,192, 3]
   transfer_learning : True
+  evaluate: False
 
 quantization:
   quantize: True
-  evaluate: True
+  evaluate: False
   quantization_dataset:
   quantizer: TFlite_converter
   quantization_type: PTQ

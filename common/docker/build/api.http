@@ -1,0 +1,42 @@
+@base_url = https://dev.stm-vespucci.com
+@jobcontrol_api_base_path = /svc/jobcontrol/v1alpha1
+@token = dummy
+###
+# @name create
+POST {{base_url}}{{jobcontrol_api_base_path}}/jobs
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: multipart/form-data; boundary=------------------------327ad9cec9ffd168
+
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="uploadedFile"; filename="cubeai_output"
+Content-Type: application/octet-stream
+
+< ./sample-inputs/object_detection/cubeai-output.zip
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="uploadedFile"; filename="model"
+Content-Type: application/octet-stream
+
+< ./sample-inputs/object_detection/model.tflite
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="templateId"
+
+01HMBW4VR0P1YQXJZEDW04YHJY
+--------------------------327ad9cec9ffd168
+Content-Disposition: form-data; name="runtimeInput"
+
+{
+    "job_config": {
+        "root": "object_detection/scripts/deployment"
+    },
+    "build_config": {}
+}
+
+--------------------------327ad9cec9ffd168--
+###
+GET {{base_url}}{{jobcontrol_api_base_path}}/jobs/{{create.response.body.$.id}}
+Authorization: Bearer {{token}}
+Accept: application/json
+###
+DELETE {{base_url}}{{jobcontrol_api_base_path}}/jobs/{{create.response.body.$.id}}
+Authorization: Bearer {{token}}

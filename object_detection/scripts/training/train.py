@@ -14,15 +14,16 @@ import hydra
 from omegaconf import DictConfig
 
 import tensorflow as tf
+
 logger = tf.get_logger()
-logger.setLevel(logging.ERROR)
+
 
 warnings.filterwarnings("ignore")
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
-sys.path.append(os.path.abspath('../utils'))
-sys.path.append(os.path.abspath('../utils/models'))
-sys.path.append(os.path.abspath('../../../common'))
+sys.path.append(os.path.abspath("../utils"))
+sys.path.append(os.path.abspath("../utils/models"))
+sys.path.append(os.path.abspath("../../../common"))
 
 
 from utils import get_config, mlflow_ini, setup_seed, train
@@ -30,7 +31,6 @@ from utils import get_config, mlflow_ini, setup_seed, train
 
 @hydra.main(version_base=None, config_path="", config_name="user_config")
 def main(cfg: DictConfig) -> None:
-
     # Initilize configuration & mlflow
     configs = get_config(cfg)
     mlflow_ini(configs)
@@ -43,5 +43,4 @@ def main(cfg: DictConfig) -> None:
 
 
 if __name__ == "__main__":
-
     main()
